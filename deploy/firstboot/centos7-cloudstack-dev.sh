@@ -25,3 +25,42 @@ pip install cloudmonkey
 
 easy_install nose
 easy_install pycrypto
+
+# Get source
+BASEDIR=/data/git/${HOSTNAME}
+
+mkdir -p ${BASEDIR}
+cd ${BASEDIR}
+if [ ! -d "cloudstack/.git" ]; then
+  echo "No git repo found, cloning https://github.com/borisroman/cloudstack.git"
+  git clone https://github.com/borisroman/cloudstack.git
+  echo "Please use 'git checkout' to checkout the branch you need."
+else
+  echo "Git Apache CloudStack repo already found"
+fi
+cd cloudstack
+
+echo "Checking out branch 4.5"
+git checkout 4.5
+
+# Set MVN compile options
+export MAVEN_OPTS="-Xmx1024m -XX:MaxPermSize=512m -Xdebug -Xrunjdwp:transport=dt_socket,address=8787,server=y,suspend=n -Djava.net.preferIPv4Stack=true"
+pwd
+echo "Done."
+
+host_ip=`ip addr | grep 'inet 192' | cut -d: -f2 | awk '{ print $2 }' | awk -F\/24 '{ print $1 }'`
+
+# Compile ACS
+mvn clean install -P developer,systemvm -DskipTests
+# Deploy DB
+mvn -P developer -pl developer -Ddeploydb
+# Configure the hostname properly - it doesn't exist if the deployeDB doesn't include devcloud
+mysql -u cloud -pcloud cloud --exec "INSERT INTO cloud.configuration (instance, name, value) VALUE('DEFAULT', 'host', '$host_ip') ON DUPLICATE KEY UPDATE value = '$host_ip';"
+
+# Adding the right SystemVMs, for KVM
+# Adding the tiny linux VM templates for KVM
+mysql -u cloud -pcloud cloud --exec "UPDATE cloud.vm_template SET url='http://jenkins.buildacloud.org/view/4.5/job/build-systemvm-4.5/lastSuccessfulBuild/artifact/tools/appliance/dist/systemvm64template-4.5-kvm.qcow2.bz2' where id=1;"
+mysql -u cloud -pcloud cloud --exec "UPDATE cloud.vm_template SET url='http://dl.openvm.eu/cloudstack/macchinina/x86_64/macchinina-kvm.qcow2.bz2', guest_os_id=140, name='tiny linux kvm', display_text='tiny linux kvm', hvm=1 where id=2;"
+
+# Reboot
+reboot

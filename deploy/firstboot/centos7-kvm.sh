@@ -10,6 +10,7 @@ systemctl disable firewalld
 
 # Install dependencies for KVM on Cloudstack
 sleep 5
+yum -y update
 yum -y install http://mirror.karneval.cz/pub/linux/fedora/epel/epel-release-latest-7.noarch.rpm
 yum -y install qemu-kvm libvirt libvirt-python net-tools bridge-utils vconfig setroubleshoot virt-top virt-manager openssh-askpass wget vim
 yum -y install http://packages.shapeblue.com/cloudstack/upstream/centos7/4.5/cloudstack-common-4.5.1-shapeblue0.el7.centos.x86_64.rpm
