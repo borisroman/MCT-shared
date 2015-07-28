@@ -14,6 +14,8 @@ mount -t nfs 192.168.22.1:/data /data
 echo "192.168.22.1:/data /data nfs rw,hard,intr,rsize=8192,wsize=8192,timeo=14 0 0" >> /etc/fstab
 
 mkdir -p /data/git
+cd /data/git
+cd /root
 
 wget https://raw.githubusercontent.com/remibergsma/dotfiles/master/.screenrc
 
@@ -23,7 +25,3 @@ pip install cloudmonkey
 
 easy_install nose
 easy_install pycrypto
-
-cd /data/git
-git clone https://github.com/borisroman/cloudstack.git
-git checkout 4.5
