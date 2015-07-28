@@ -305,11 +305,11 @@ class kvm_local_deploy:
         except:
             return False
 
-    # Execute actions before starting the VM, like adding a first-boot script
+    # Execute actions before starting the VM, like adding a first-boot script and setting the hostname
     def firstboot_action(self, role_name, vm_name):
         role_dict = self.get_role(role_name)
         try:
-            command = "virt-customize -d " + vm_name + " --firstboot " + self.config_data['base_dir'] + "/" + self.config_data['firstboot_dir'] + role_dict['firstboot']
+            command = "virt-customize -d " + vm_name + " --firstboot " + self.config_data['base_dir'] + "/" + self.config_data['firstboot_dir'] + role_dict['firstboot'] --hostname " + vm_name + ".cloud.lan"
             if len(role_dict['firstboot']) > 0:
                 print "Note: Running pre_boot script: " + command
                 return_code = subprocess.call(command, shell=True)  
@@ -318,19 +318,6 @@ class kvm_local_deploy:
                 print "WARNING: No firstboot script defined."
         except:
             print "ERROR: firstboot script failed."
-            return False
-        return return_code
-
-    # Execute set_hostname before starting the vm.
-    def set_hostname(self, vm_name):
-        try:
-            command = "virt-customize -d " + vm_name + " --hostname " + vm_name + ".cloud.lan"
-
-            print "Note: Running virt-customize to set hostname: " + command
-            return_code = subprocess.call(command, shell=True)  
-
-        except:
-            print "ERROR: virt-customize failed to set hostname."
             return False
         return return_code
 
@@ -377,8 +364,6 @@ class kvm_local_deploy:
         self.define_vm(role_name, vm_name)
         # Exec firstboot action
         self.firstboot_action(role_name, vm_name)
-	# Exec virt-customize and set domainname
-	self.set_hostname(vm_name)
         # Start domain
         self.start_vm(vm_name)
         # Exec postboot action
