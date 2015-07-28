@@ -309,7 +309,7 @@ class kvm_local_deploy:
     def firstboot_action(self, role_name, vm_name):
         role_dict = self.get_role(role_name)
         try:
-            command = "virt-customize -d " + vm_name + " --firstboot " + self.config_data['base_dir'] + "/" + self.config_data['firstboot_dir'] + role_dict['firstboot'] + " --hostname " + vm_name + ".cloud.lan"
+            command = "virt-customize -d " + vm_name + " --firstboot " + self.config_data['base_dir'] + self.config_data['firstboot_dir'] + role_dict['firstboot'] + " --hostname " + vm_name + ".cloud.lan"
             if len(role_dict['firstboot']) > 0:
                 print "Note: Running pre_boot script: " + command
                 return_code = subprocess.call(command, shell=True)  
@@ -334,7 +334,7 @@ class kvm_local_deploy:
     def postboot_action(self, role_name, vm_name):
         role_dict = self.get_role(role_name)
         try:
-            command = self.config_data['base_dir'] + "/" + self.config_data['postboot_dir'] + role_dict['postboot'] + " " + vm_name
+            command = self.config_data['base_dir'] + self.config_data['postboot_dir'] + role_dict['postboot'] + " " + self.get_ip_and_mac(vm_name)['ip']
             if len(role_dict['postboot']) > 0:
                 print "Note: Running postboot script: " + command
                 return_code = subprocess.call(command, shell=True)  
