@@ -231,7 +231,7 @@ class kvm_local_deploy:
 
     # Get MAC and IP from Qemu
     def get_ip_and_mac(self, hostname):
-        net = self.conn.networkLookupByName('NAT_public')
+        net = self.conn.networkLookupByName('NAT_private')
         root = ET.fromstring(net.XMLDesc())
         dhcp = root.findall("./ip/dhcp/host")
         result = {}
