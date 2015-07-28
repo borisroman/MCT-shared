@@ -34,13 +34,13 @@
     </controller>
     <interface type='bridge'>
       <source bridge='virbr0'/>
-      <target dev='eth0'/>
+      <target dev='{{name}}-eth0'/>
       <model type='{{net_model}}'/>
     </interface>
     <interface type='bridge'>
       <mac address='{{mac}}'/>
       <source bridge='virbr1'/>
-      <target dev='eth1'/>
+      <target dev='{{name}}-eth1'/>
       <model type='{{net_model}}'/>
     </interface>
     <serial type='pty'>
