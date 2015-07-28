@@ -1,5 +1,0 @@
-[cloud]
-cloud_name = cloudstack-dev
-deploy_roles = cloudstack-mgt-dev, kvm_4GB_4_5
-pre_deploy =
-post_deploy =

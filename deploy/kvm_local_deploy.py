@@ -231,7 +231,7 @@ class kvm_local_deploy:
 
     # Get MAC and IP from Qemu
     def get_ip_and_mac(self, hostname):
-        net = self.conn.networkLookupByName('NAT')
+        net = self.conn.networkLookupByName('NAT_public')
         root = ET.fromstring(net.XMLDesc())
         dhcp = root.findall("./ip/dhcp/host")
         result = {}
@@ -321,6 +321,19 @@ class kvm_local_deploy:
             return False
         return return_code
 
+    # Execute set_hostname before starting the vm.
+    def set_hostname(self, vm_name):
+        try:
+            command = "virt-customize -d " + vm_name + " --hostname " + vm_name + ".cloud.lan"
+
+            print "Note: Running virt-customize to set hostname: " + command
+            return_code = subprocess.call(command, shell=True)  
+
+        except:
+            print "ERROR: virt-customize failed to set hostname."
+            return False
+        return return_code
+
     # Start the VM
     def start_vm(self, vm_name):
         dom = self.get_domain(vm_name)
@@ -364,6 +377,8 @@ class kvm_local_deploy:
         self.define_vm(role_name, vm_name)
         # Exec firstboot action
         self.firstboot_action(role_name, vm_name)
+	# Exec virt-customize and set domainname
+	self.set_hostname(vm_name)
         # Start domain
         self.start_vm(vm_name)
         # Exec postboot action

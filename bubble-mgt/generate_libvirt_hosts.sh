@@ -1,7 +1,7 @@
 #!/bin/bash
 
 START=9
-IPADDRESS="192.168.22."
+IPADDRESS="192.168.23."
 MACADDR="52:54:00:1d:aa:"
 CATEGORY="xen
 kvm

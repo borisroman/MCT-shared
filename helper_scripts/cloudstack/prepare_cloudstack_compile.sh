@@ -20,12 +20,14 @@ mkdir -p ${BASEDIR}
 cd ${BASEDIR}
 if [ ! -d "cloudstack/.git" ]; then
   echo "No git repo found, cloning Apache CloudStack"
-  git clone https://github.com/apache/cloudstack.git
+  git clone https://github.com/borisroman/cloudstack.git
   echo "Please use 'git checkout' to checkout the branch you need."
 else
   echo "Git Apache CloudStack repo already found"
 fi
 cd cloudstack
+
+git checkout 4.5
 
 # Check VHD-UTIL
 if [ ! -f "scripts/vm/hypervisor/xenserver/vhd-util" ]; then

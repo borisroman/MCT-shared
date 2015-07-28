@@ -12,15 +12,15 @@ systemctl disable firewalld
 sleep 5
 yum -y install http://mirror.karneval.cz/pub/linux/fedora/epel/epel-release-latest-7.noarch.rpm
 yum -y install qemu-kvm libvirt libvirt-python net-tools bridge-utils vconfig setroubleshoot virt-top virt-manager openssh-askpass wget vim
-yum -y install http://mctadm1/cloudstack/4.4-noredist/cloudstack-common-4.4.3-SNAPSHOT.el7.centos.x86_64.rpm 
-yum -y install http://mctadm1/cloudstack/4.4-noredist/cloudstack-agent-4.4.3-SNAPSHOT.el7.centos.x86_64.rpm
+yum -y install http://packages.shapeblue.com/cloudstack/upstream/centos7/4.5/cloudstack-common-4.5.1-shapeblue0.el7.centos.x86_64.rpm
+yum -y install http://packages.shapeblue.com/cloudstack/upstream/centos7/4.5/cloudstack-agent-4.5.1-shapeblue0.el7.centos.x86_64.rpm
 
 # Enable rpbind for NFS
 systemctl enable rpcbind
 systemctl start rpcbind
 
 # Enable nesting
-echo "options kvm_intel nested=1" >> /etc/modprobe.d/kvm-nested.conf
+echo "options kvm_amd nested=1" >> /etc/modprobe.d/kvm-nested.conf
 
 # Set short hostname
 # hostnamectl --static set-hostname mccxvm22
@@ -60,12 +60,12 @@ BOOTPROTO=none
 TYPE=Ethernet
 BRIDGE=cloudbr0" > /etc/sysconfig/network-scripts/ifcfg-eth0
 
-# Pub
-echo "DEVICE=cloudbr0.50
+echo "DEVICE=eth1
 ONBOOT=yes
 HOTPLUG=no
 BOOTPROTO=none
-VLAN=yes" > /etc/sysconfig/network-scripts/ifcfg-cloudbr0.50
+TYPE=Ethernet
+BRIDGE=cloudbr1" > /etc/sysconfig/network-scripts/ifcfg-eth1
 
 # Bridge0
 echo "DEVICE=cloudbr0
@@ -81,7 +81,7 @@ STP=yes" > /etc/sysconfig/network-scripts/ifcfg-cloudbr0
 echo "DEVICE=cloudbr1
 TYPE=Bridge
 ONBOOT=yes
-BOOTPROTO=none
+BOOTPROTO=dhcp
 IPV6INIT=no
 IPV6_AUTOCONF=no
 DELAY=5
