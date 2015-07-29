@@ -74,7 +74,7 @@ BOOTPROTO=dhcp
 IPV6INIT=no
 IPV6_AUTOCONF=no
 DELAY=5
-STP=yes" > /etc/sysconfig/network-scripts/ifcfg-cloudbr0
+STP=no" > /etc/sysconfig/network-scripts/ifcfg-cloudbr0
 
 # Bridge1
 echo "DEVICE=cloudbr1
@@ -84,7 +84,7 @@ BOOTPROTO=dhcp
 IPV6INIT=no
 IPV6_AUTOCONF=no
 DELAY=5
-STP=yes" > /etc/sysconfig/network-scripts/ifcfg-cloudbr1
+STP=no" > /etc/sysconfig/network-scripts/ifcfg-cloudbr1
 
 # Reboot
 reboot
