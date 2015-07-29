@@ -1,14 +1,19 @@
 #!/bin/bash
 
+# Disable selinux
+setenforce permissive
+sed -i "/SELINUX=enforcing/c\SELINUX=permissive" /etc/selinux/config
+
+# Disable firewall
+systemctl stop firewalld
+systemctl disable firewalld
+
 # Prepare CentOS7 bare box to compile CloudStack and run management server
 sleep 5
-yum -y update
-yum -y install maven tomcat mkisofs python-paramiko jakarta-commons-daemon-jsvc jsvc ws-commons-util genisoimage gcc python MySQL-python openssh-clients wget git python-ecdsa bzip2 python-setuptools mariadb-server mariadb python-devel vim nfs-utils screen setroubleshoot openssh-askpass java-1.8.0-openjdk-devel.x86_64 rpm-build
+yum -y install maven tomcat mkisofs python-paramiko jakarta-commons-daemon-jsvc jsvc ws-commons-util genisoimage gcc python MySQL-python openssh-clients wget git python-ecdsa bzip2 python-setuptools mariadb-server mariadb python-devel vim nfs-utils screen setroubleshoot openssh-askpass java-1.8.0-openjdk-devel.x86_64 rpm-build ntp
 
 systemctl start mariadb.service
 systemctl enable mariadb.service
-systemctl stop firewalld.service
-systemctl disable firewalld.service
 
 mkdir -p /data
 mount -t nfs 192.168.23.1:/data /data
@@ -63,9 +68,9 @@ mysql -u cloud -pcloud cloud --exec "UPDATE cloud.vm_template SET url='http://cl
 mysql -u cloud -pcloud cloud --exec "UPDATE cloud.vm_template SET url='http://dl.openvm.eu/cloudstack/macchinina/x86_64/macchinina-kvm.qcow2.bz2', guest_os_id=140, name='tiny linux kvm', display_text='tiny linux kvm', hvm=1 where id=2;"
 
 # Open ports for Cloudstack
-firewall-cmd --permanent --add-port=8080/tcp
-firewall-cmd --permanent --add-port=8081/tcp
-firewall-cmd --permanent --add-port=8787/tcp
+#firewall-cmd --permanent --add-port=8080/tcp
+#firewall-cmd --permanent --add-port=8081/tcp
+#firewall-cmd --permanent --add-port=8787/tcp
 
 # Reboot
 reboot
