@@ -11,8 +11,8 @@ systemctl stop firewalld.service
 systemctl disable firewalld.service
 
 mkdir -p /data
-mount -t nfs 192.168.22.1:/data /data
-echo "192.168.22.1:/data /data nfs rw,hard,intr,rsize=8192,wsize=8192,timeo=14 0 0" >> /etc/fstab
+mount -t nfs 192.168.23.1:/data /data
+echo "192.168.23.1:/data /data nfs rw,hard,intr,rsize=8192,wsize=8192,timeo=14 0 0" >> /etc/fstab
 
 mkdir -p /data/git
 cd /root
