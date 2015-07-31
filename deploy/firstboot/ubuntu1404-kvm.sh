@@ -1,17 +1,16 @@
 #!/bin/bash
 
-# Disable apparmor
-ln -s /etc/apparmor.d/usr.sbin.libvirtd /etc/apparmor.d/disable/
-ln -s /etc/apparmor.d/usr.lib.libvirt.virt-aa-helper /etc/apparmor.d/disable/
-apparmor_parser -R /etc/apparmor.d/usr.sbin.libvirtd
-apparmor_parser -R /etc/apparmor.d/usr.lib.libvirt.virt-aa-helper
-
 # Install dependencies for KVM on Cloudstack
 echo deb http://cloudstack.apt-get.eu/ubuntu trusty 4.5 > /etc/apt/sources.list.d/cloudstack.list
 wget -O - http://cloudstack.apt-get.eu/release.asc|apt-key add -
 apt-get update
 apt-get install cloudstack-agent -y
 
+# Disable apparmor
+ln -s /etc/apparmor.d/usr.sbin.libvirtd /etc/apparmor.d/disable/
+ln -s /etc/apparmor.d/usr.lib.libvirt.virt-aa-helper /etc/apparmor.d/disable/
+apparmor_parser -R /etc/apparmor.d/usr.sbin.libvirtd
+apparmor_parser -R /etc/apparmor.d/usr.lib.libvirt.virt-aa-helper
 
 # Cloudstack agent.properties settings
 cp -pr /etc/cloudstack/agent/agent.properties /etc/cloudstack/agent/agent.properties.orig
