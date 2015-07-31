@@ -7,8 +7,10 @@ apparmor_parser -R /etc/apparmor.d/usr.sbin.libvirtd
 apparmor_parser -R /etc/apparmor.d/usr.lib.libvirt.virt-aa-helper
 
 # Install dependencies for KVM on Cloudstack
-URL='http://cloudstack.apt-get.eu/ubuntu/dists/trusty/4.5/pool/cloudstack-common_4.5.1_all.deb'; FILE=`mktemp`; wget "$URL" -qO $FILE && dpkg -i $FILE; rm $FILE
-URL='http://cloudstack.apt-get.eu/ubuntu/dists/trusty/4.5/pool/cloudstack-agent_4.5.1_all.deb'; FILE=`mktemp`; wget "$URL" -qO $FILE && dpkg -i $FILE; rm $FILE
+echo deb http://cloudstack.apt-get.eu/ubuntu trusty 4.5 > /etc/apt/sources.list.d/cloudstack.list
+wget -O - http://cloudstack.apt-get.eu/release.asc|apt-key add -
+apt-get update
+pt-get install cloudstack-agent -y
 
 
 # Cloudstack agent.properties settings
