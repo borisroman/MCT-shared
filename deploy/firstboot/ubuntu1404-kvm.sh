@@ -10,7 +10,7 @@ apparmor_parser -R /etc/apparmor.d/usr.lib.libvirt.virt-aa-helper
 echo deb http://cloudstack.apt-get.eu/ubuntu trusty 4.5 > /etc/apt/sources.list.d/cloudstack.list
 wget -O - http://cloudstack.apt-get.eu/release.asc|apt-key add -
 apt-get update
-pt-get install cloudstack-agent -y
+apt-get install cloudstack-agent -y
 
 
 # Cloudstack agent.properties settings
