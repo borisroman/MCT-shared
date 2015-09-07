@@ -5,9 +5,9 @@ host_ip=`ip addr | grep 'inet 192' | cut -d: -f2 | awk '{ print $2 }' | awk -F\/
 # We work from here
 cd /data/git/$HOSTNAME/cloudstack
 # Compile ACS
-mvn clean install -P developer,systemvm -DskipTests
+mvn clean install -P developer,systemvm -DskipTests -T 2C
 # Deploy DB
-mvn -P developer -pl developer -Ddeploydb
+mvn -P developer -pl developer -Ddeploydb -T 2C
 # Configure the hostname properly - it doesn't exist if the deployeDB doesn't include devcloud
 mysql -u cloud -pcloud cloud --exec "INSERT INTO cloud.configuration (instance, name, value) VALUE('DEFAULT', 'host', '$host_ip') ON DUPLICATE KEY UPDATE value = '$host_ip';"
 
