@@ -32,10 +32,13 @@ cloudmonkey -d default create physicalnetwork zoneid=`echo $zone_uuid` name="Phy
 physical_network_uuid=$(cloudmonkey -d default list physicalnetworks filter=id | grep 'id =' | awk {'print $3'})
 
 # Add traffic type Guest
-cloudmonkey -d default add traffictype traffictype=Guest physicalnetworkid=`echo $physical_network_uuid`
+cloudmonkey -d default add traffictype traffictype=Guest physicalnetworkid=`echo $physical_network_uuid` kvmnetworklabel=cloudbr0
 
 # Add traffic type Management
-cloudmonkey -d default add traffictype traffictype=Management physicalnetworkid=`echo $physical_network_uuid`
+cloudmonkey -d default add traffictype traffictype=Management physicalnetworkid=`echo $physical_network_uuid` kvmnetworklabel=cloudbr1
+
+# Add traffic type Storage
+cloudmonkey -d default add traffictype traffictype=Storage physicalnetworkid=`echo $physical_network_uuid` kvmnetworklabel=cloudbr1
 
 # Enable network
 cloudmonkey -d default update physicalnetwork state=Enabled id=`echo $physical_network_uuid`
